@@ -1,67 +1,98 @@
 class ScraperService < BaseService
-  attr_reader :document
+  attr_reader :keyword, :document, :query_keyword, :user_id
   BASE_URL = "https://www.google.com/search?q="
   USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36"
   ENCODING = "UTF-8"
-  TOP_ADS_CSS_CLASS = "#tads .ads-ad .ad_cclk"
-  BOTTOM_ADS_CSS_CLASS = "#tadsb .ads-ad .ad_cclk"
+  TOP_ADS_CSS_CLASS = "#tads .ads-ad"
+  BOTTOM_ADS_CSS_CLASS = "#tadsb .ads-ad"
   RIGHT_ADS_CSS_CLASS = ""
   NON_ADS_CSS_CLASS = ".srg .r"
   TOTAL_RESULT_CSS_CLASS = "#resultStats"
 
-  def initialize keyword = ""
-    @query_key_word = keyword.gsub /\s/, "+"
+  def initialize keyword, user_id
+    @keyword = keyword
+    @user_id = user_id
+    @query_keyword = keyword.gsub /\s/, "+"
   end
 
   def perform
     @document = get_document
+    save_result
   end
 
   private
+  def save_result
+    begin
+      links_attributes = []
+      non_ads_links_information(non_ads_links).each do |link|
+        links_attributes << {
+          link_type: Link.link_types[:non_ad],
+          title: link[:title],
+          url: link[:url]
+        }
+      end
+      ads_links_information(top_ads_links).each do |link|
+        links_attributes << {
+          link_type: Link.link_types[:top_ad],
+          title: link[:title],
+          url: link[:url]
+        }
+      end
+      ads_links_information(bottom_ads_links).each do |link|
+        links_attributes << {
+          link_type: Link.link_types[:bottom_ad],
+          title: link[:title],
+          url: link[:url]
+        }
+      end
+      total_links = links_attributes.size
+      SearchResult.create! keyword: keyword, total_results: total_results,
+        total_links: total_links, html_code: html_code, user_id: user_id,
+        links_attributes: links_attributes
+    rescue Exception => error
+      $stderr.puts "Save search result failed: #{error.message}"
+    end
+  end
+
   def get_document
-    @response = open "#{BASE_URL}#{@query_key_word}", "User-Agent" => USER_AGENT
+    puts "#{BASE_URL}#{query_keyword}"
+    @response = open "#{BASE_URL}#{query_keyword}", "User-Agent" => USER_AGENT
     Nokogiri::HTML @response, nil, ENCODING
   end
 
-  def total_result
+  def total_results
     document.at_css(TOTAL_RESULT_CSS_CLASS).text
-      .gsub(/[,.]/, '').scan(/\d+/).first
+      .gsub(/[,.]/, '').scan(/\d+/).first.to_i
   end
 
-  def non_ads
+  def non_ads_links
     document.css NON_ADS_CSS_CLASS
   end
 
-  def top_ads
+  def top_ads_links
     document.css TOP_ADS_CSS_CLASS
   end
 
-  def bottom_ads
+  def bottom_ads_links
     document.css BOTTOM_ADS_CSS_CLASS
   end
 
   def non_ads_links_information links
-    {
-      size: links.size,
-      links: links.map do |link|
-        {
-          title: link.at_css("h3").content,
-          link: link.children.at_css("a").attr("href")
-        }
-      end
-    }
+    links.map do |link|
+      {
+        title: link.children.text,
+        url: link.children.at_css("a").attr("href")
+      }
+    end
   end
 
   def ads_links_information links
-    {
-      size: links.size,
-      links: links.map do |link|
-        {
-          title: link.at_css("h3").content,
-          link: link.at_css("cite").content
-        }
-      end
-    }
+    links.map do |link|
+      {
+        title: link.at_css("h3").content,
+        url: link.at_css("cite").content
+      }
+    end
   end
 
   def html_code
