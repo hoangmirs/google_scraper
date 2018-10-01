@@ -22,12 +22,14 @@ gem 'rails_admin'
 # Authentications & Authorizations
 gem 'devise' # Authentication solution for Rails with Warden
 gem 'pundit' # Minimal authorization through OO design and pure Ruby classes
+gem 'omniauth-google-oauth2'
 
 # Assets
 gem 'jquery-rails' # Use jquery as the JavaScript library
 gem 'font-awesome-sass' # Font-Awesome Sass gem for use in Ruby/Rails projects
 gem 'sass-rails' # SASS
 gem 'uglifier'
+gem 'bootstrap-sass'
 
 group :development do
   gem 'better_errors' # Better error page for Rails and other Rack apps

@@ -22,6 +22,29 @@ brew install yarn
 ```
 
 ### Development
+* config/application.yml
+```
+default: &default
+  DB_HOST: ""
+  DB_PORT: "5432"
+  USERNAME: "postgres"
+  MAILER_DEFAULT_HOST: "localhost"
+  MAILER_DEFAULT_PORT: "3000"
+  MAILER_SENDER: "Test <noreply@nimbl3.co>"
+  GOOGLE_CLIENT_ID: ""
+  GOOGLE_CLIENT_SECRET: ""
+
+development:
+  <<: *default
+  DB_NAME: "google_scraper_development"
+  SECRET_KEY_BASE: "#{secret_key_base}"
+
+test:
+  <<: *default
+  DB_NAME: "google_scraper_test"
+  TEST_RETRY: "0"
+  SECRET_KEY_BASE: "#{secret_key_base}"
+```
 
 * Setup the databases:
 
