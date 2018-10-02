@@ -7,4 +7,8 @@ module ApplicationHelper
       page_title + " | " + base_title
     end
   end
+
+  def get_link_type_and_size links
+    "#{links.last.link_type.humanize}: #{links.size}"
+  end
 end

@@ -1,7 +1,7 @@
-<% provide :title, "Log in" %>
+<% provide :title, "Sign in" %>
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
-    <h2><b><%= "Log in" %></b></h2>
+    <h2><b><%= "Sign in" %></b></h2>
 
     <%= form_for(resource, as: resource_name,
       url: session_path(resource_name)) do |f| %>
@@ -25,7 +25,7 @@
       <% end -%>
 
       <div class="actions">
-        <%= f.submit "Log in", class: "btn btn-primary btn-block" %>
+        <%= f.submit "Sign in", class: "btn btn-primary btn-block" %>
       </div>
     <% end %>
 
