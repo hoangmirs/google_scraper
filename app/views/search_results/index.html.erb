@@ -1,6 +1,12 @@
+<% provide :title, "List search results" %>
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
-    <h2>Search results</h2>
+    <h2>Search results
+      <span class="pull-right">
+        <%= link_to "New search", new_search_result_path,
+          class: "btn btn-primary" %>
+      </span>
+    </h2>
     <table class="table table-hover table-bordered">
       <thead>
         <tr class="info">
