@@ -78,10 +78,11 @@ class ScraperService < BaseService
   end
 
   def non_ads_links_information links
+    binding.pry
     links.map do |link|
       {
-        title: link.children.text,
-        url: link.children.at_css("a").attr("href")
+        title: link.text,
+        url: link.at_css("a").attr("href")
       }
     end
   end

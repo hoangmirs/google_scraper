@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <h2>Search results</h2>
+    <table class="table table-hover table-bordered">
+      <thead>
+        <tr class="info">
+          <th>ID</th>
+          <th>Keyword</th>
+          <th>Total results</th>
+          <th>Total links (first page)</th>
+          <th>Search by</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <%= render "index" %>
+    </table>
+    <%= paginate @search_results %>
+  </div>
+</div>

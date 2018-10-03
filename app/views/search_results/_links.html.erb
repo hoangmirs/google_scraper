@@ -1,0 +1,9 @@
+<ul class="list-group">
+  <li class="list-group-item active"><%= get_link_type_and_size links %></li>
+  <% links.each do |link| %>
+    <li class="list-group-item">
+      <%= "#{link.title} |" %>
+      <%= link_to link.url, link.url %>
+    </li>
+  <% end %>
+</ul>
