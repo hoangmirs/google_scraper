@@ -8,6 +8,9 @@ class SearchResultsController < ApplicationController
   def show
   end
 
+  def new
+  end
+
   def destroy
     if @search_result.destroy
       flash[:success] = "Delete successful"

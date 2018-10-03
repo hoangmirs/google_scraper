@@ -1,3 +1,4 @@
+<% provide :title, "Search result details" %>
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
     <h2>Search details</h2>
@@ -18,14 +19,14 @@
               <%= "Total result links in first page: #{@search_result.total_links}" %>
             </li>
           </ul>
-          <%= render "links", links: @search_result.links.top_ad %>
-          <%= render "links", links: @search_result.links.bottom_ad %>
-          <%= render "links", links: @search_result.links.non_ad %>
+          <%= render "links", links: @search_result.links.top_ad, link_type: :top_ad %>
+          <%= render "links", links: @search_result.links.bottom_ad, link_type: :bottom_ad %>
+          <%= render "links", links: @search_result.links.non_ad, link_type: :non_ad %>
           <div class="jumbotron">
             <a class="btn btn-primary" data-toggle="collapse" href="#collapse-code" role="button" aria-expanded="false" aria-controls="collapse-code">Toggle HTML code</a>
             <div class="collapse" id="collapse-code">
               <div class="html-code">
-                <%= @search_result.html_code %>
+                <%= @search_result.html_code.html_safe %>
               </div>
             </div>
           </div>

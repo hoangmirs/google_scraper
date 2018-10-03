@@ -1,5 +1,5 @@
 class ScraperService < BaseService
-  attr_reader :keyword, :document, :query_keyword, :user_id
+  attr_reader :keyword, :document, :query_keyword, :user_id, :error, :result
   BASE_URL = "https://www.google.com/search?q="
   USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36"
   ENCODING = "UTF-8"
@@ -13,6 +13,7 @@ class ScraperService < BaseService
     @keyword = keyword
     @user_id = user_id
     @query_keyword = keyword.gsub /\s/, "+"
+    @error = ""
   end
 
   def perform
@@ -46,17 +47,24 @@ class ScraperService < BaseService
         }
       end
       total_links = links_attributes.size
-      SearchResult.create! keyword: keyword, total_results: total_results,
+      @result = SearchResult.create! keyword: keyword,
+        total_results: total_results,
         total_links: total_links, html_code: html_code, user_id: user_id,
         links_attributes: links_attributes
     rescue Exception => error
+      @error = error.message
       $stderr.puts "Save search result failed: #{error.message}"
     end
   end
 
   def get_document
-    puts "#{BASE_URL}#{query_keyword}"
-    @response = open "#{BASE_URL}#{query_keyword}", "User-Agent" => USER_AGENT
+    url = "#{BASE_URL}#{query_keyword}"
+    begin
+      uri = URI.parse(url)
+    rescue URI::InvalidURIError
+      uri = URI.parse(URI.escape(url))
+    end
+    @response = open uri, "User-Agent" => USER_AGENT
     Nokogiri::HTML @response, nil, ENCODING
   end
 
@@ -78,7 +86,6 @@ class ScraperService < BaseService
   end
 
   def non_ads_links_information links
-    binding.pry
     links.map do |link|
       {
         title: link.text,
