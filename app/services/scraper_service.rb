@@ -1,7 +1,6 @@
 class ScraperService < BaseService
   attr_reader :keyword, :document, :query_keyword, :user_id, :error, :result
   BASE_URL = "https://www.google.com/search?q="
-  USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36"
   ENCODING = "UTF-8"
   TOP_ADS_CSS_CLASS = "#tads .ads-ad"
   BOTTOM_ADS_CSS_CLASS = "#tadsb .ads-ad"
@@ -64,7 +63,7 @@ class ScraperService < BaseService
     rescue URI::InvalidURIError
       uri = URI.parse(URI.escape(url))
     end
-    @response = open uri, "User-Agent" => USER_AGENT
+    @response = open uri, "User-Agent" => UserAgentRandomService.perform
     Nokogiri::HTML @response, nil, ENCODING
   end
 

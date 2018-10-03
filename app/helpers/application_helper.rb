@@ -15,7 +15,7 @@ module ApplicationHelper
   def show_sidekiq_running_title
     if (runnung_keywords = Sidekiq::Stats.new.enqueued) > 0
       content_tag :div, class: "alert alert-warning" do
-        content_tag :span, "#{runnung_keywords} #{"keyword".pluralize(runnung_keywords)} are being processed"
+        content_tag :span, "The file is being processed. Please reload after few seconds"
       end
     end
   end
