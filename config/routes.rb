@@ -6,10 +6,12 @@ Rails.application.routes.draw do
   root "search_results#new"
 
   resources :search_results, except: [:edit, :update]
+  resources :link_queries, only: :index
 
   namespace :api do
     namespace :v1 do
       resource :search, only: :create
+      resources :link_queries, only: :index
     end
   end
 end

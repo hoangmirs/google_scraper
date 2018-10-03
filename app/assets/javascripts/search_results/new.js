@@ -13,8 +13,8 @@ function showInfoKeywordForm(text) {
 }
 
 function init_file_upload_form() {
-  $(".infoFileUploadForm").hide();
   $(document).on('submit', '#file-upload-form', function (e) {
+    $(".infoFileUploadForm").hide();
     e.preventDefault();
     var file = $("#keywords_file").val();
     if (file == '') {
@@ -35,7 +35,6 @@ function init_file_upload_form() {
 }
 
 function submit_file_upload_form() {
-  $(".infoFileUploadForm").hide();
   var form_data = new FormData($('#file-upload-form')[0]);
   $.ajax({
     type: 'POST',
@@ -56,20 +55,20 @@ function submit_file_upload_form() {
 }
 
 function init_keyword_form() {
-  $(".infoKeywordForm").hide();
   $(document).on('submit', '#keyword-form', function (e) {
+    $(".infoKeywordForm").hide();
     e.preventDefault();
-    submit_keyword_form();
+    if ($("#keyword").val() == '') {
+      showInfoKeywordForm("Please enter a keyword");
+      e.preventDefault();
+    } else {
+      submit_keyword_form();
+    }
   });
 }
 
 function submit_keyword_form() {
-  $(".infoKeywordForm").hide();
   var form_data = new FormData($('#keyword-form')[0]);
-  if ($("#keyword").val() == '') {
-    showInfoKeywordForm("Please enter a keyword");
-    e.preventDefault();
-  }
   $.ajax({
     type: 'POST',
     url: '/api/v1/search',
