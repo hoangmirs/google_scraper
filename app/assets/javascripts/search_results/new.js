@@ -13,6 +13,7 @@ function showInfoKeywordForm(text) {
 }
 
 function init_file_upload_form() {
+  $(".infoFileUploadForm").hide();
   $(document).on('submit', '#file-upload-form', function (e) {
     $(".infoFileUploadForm").hide();
     e.preventDefault();
@@ -55,6 +56,7 @@ function submit_file_upload_form() {
 }
 
 function init_keyword_form() {
+  $(".infoKeywordForm").hide();
   $(document).on('submit', '#keyword-form', function (e) {
     $(".infoKeywordForm").hide();
     e.preventDefault();

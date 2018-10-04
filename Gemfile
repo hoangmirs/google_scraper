@@ -25,6 +25,7 @@ gem 'rails_admin'
 gem 'devise' # Authentication solution for Rails with Warden
 gem 'pundit' # Minimal authorization through OO design and pure Ruby classes
 gem 'omniauth-google-oauth2'
+gem 'doorkeeper'
 
 # Assets
 gem 'jquery-rails' # Use jquery as the JavaScript library

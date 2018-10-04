@@ -129,3 +129,63 @@ docker-compose -f docker-compose.test.yml run test [rspec-params]
 ```
 if ([ $BRANCH_NAME != 'master' ] && [ $BRANCH_NAME != 'development' ]); then (echo "Running pronto"; bundle exec pronto run -f bitbucket_pr -c origin/development); else (echo "Escaping pronto"); fi
 ```
+
+## API
+### Login using email & password
+`POST /oauth/token`
+
+Body:
+```
+{
+  "grant_type": "password",
+  "email": "hoang@gmail.com",
+  "password": "123456"
+}
+```
+Response:
+```
+{
+  "access_token": "5575f0c84e814013398fc0f55f755b4d3768a7041486ef92b1cb6bc5bab30afe",
+  "token_type": "Bearer",
+  "expires_in": 7200,
+  "refresh_token": "161c6e739ff776479501ac63d10cf8819c44de062eaa616fe6d842c7c37dded7",
+  "created_at": 1538649200
+}
+```
+
+### Refresh token
+`POST /oauth/token`
+
+Body:
+```
+{
+  "grant_type": "refresh_token",
+  "refresh_token": "074e26ddb55228422ef306dd304586d5f739cfae643079ece337adeb26346942"
+}
+```
+Response:
+```
+{
+  "access_token": "f6cfd4e13f39e991264f8290ed42317b8592365bb6f6c5da52c7237bdf4e1347",
+  "token_type": "Bearer",
+  "expires_in": 7200,
+  "refresh_token": "36d8aad4e8a3321dfa5bc9d7254ca7cbb4a9332612ac8463e5a8fc252891300c",
+  "created_at": 1538649420
+}
+```
+
+### Revoke token
+`POST /oauth/revoke`
+
+Headers:
+```
+"Authorization": "Bearer f6cfd4e13f39e991264f8290ed42317b8592365bb6f6c5da52c7237bdf4e1347"
+```
+
+### Other API
+Using below header to request data
+
+Headers:
+```
+"Authorization": "Bearer {{access_token}}"
+```
