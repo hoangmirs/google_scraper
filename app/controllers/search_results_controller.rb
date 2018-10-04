@@ -2,7 +2,7 @@ class SearchResultsController < ApplicationController
   before_action :load_search_result, except: :index
 
   def index
-    @search_results = SearchResult.includes(:user).order(created_at: :desc).page(params[:page]).per(Settings.pagination.per_page).decorate
+    @search_results = SearchResult.includes(:user).order(:keyword).page(params[:page]).per(Settings.pagination.per_page).decorate
   end
 
   def show
