@@ -7,6 +7,7 @@ class ScraperService < BaseService
   RIGHT_ADS_CSS_CLASS = ""
   NON_ADS_CSS_CLASS = ".srg .r"
   TOTAL_RESULT_CSS_CLASS = "#resultStats"
+  GET_IP_URL = "http://whatismyip.akamai.com"
 
   def initialize keyword, user_id
     @keyword = keyword
@@ -46,10 +47,12 @@ class ScraperService < BaseService
         }
       end
       total_links = links_attributes.size
+      server_ip = get_server_ip
       @result = SearchResult.create! keyword: keyword,
         total_results: total_results,
         total_links: total_links, html_code: html_code, user_id: user_id,
-        links_attributes: links_attributes
+        links_attributes: links_attributes,
+        server_ip: server_ip, user_agent: @user_agent
     rescue Exception => error
       @error = error.message
       $stderr.puts "Save search result failed: #{error.message}"
@@ -63,7 +66,8 @@ class ScraperService < BaseService
     rescue URI::InvalidURIError
       uri = URI.parse(URI.escape(url))
     end
-    @response = open uri, "User-Agent" => UserAgentRandomService.perform
+    @user_agent = UserAgentRandomService.perform
+    @response = open uri, "User-Agent" => @user_agent
     Nokogiri::HTML @response, nil, ENCODING
   end
 
@@ -104,5 +108,9 @@ class ScraperService < BaseService
 
   def html_code
     document.to_html
+  end
+
+  def get_server_ip
+    open(GET_IP_URL).read
   end
 end
