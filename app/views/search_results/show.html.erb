@@ -9,6 +9,7 @@
       </div>
         <div class="panel-body">
           <ul class="list-group">
+            <li class="list-group-item active">General information</li>
             <li class="list-group-item">
               <%= "Search by: #{@search_result.user.email}" %>
             </li>
@@ -17,6 +18,15 @@
             </li>
             <li class="list-group-item">
               <%= "Total result links in first page: #{@search_result.total_links}" %>
+            </li>
+          </ul>
+          <ul class="list-group">
+            <li class="list-group-item active">For server tracking</li>
+            <li class="list-group-item">
+              <%= "Server IP: #{@search_result.server_ip}" %>
+            </li>
+            <li class="list-group-item">
+              <%= "UserAgent: #{@search_result.user_agent}" %>
             </li>
           </ul>
           <%= render "links", links: @search_result.links.top_ad, link_type: :top_ad %>
