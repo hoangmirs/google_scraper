@@ -1,0 +1,40 @@
+<% provide :title, "Link queries" %>
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <h2>Link queries</h2>
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h3>Some link queries</h3>
+      </div>
+      <%= form_tag api_v1_link_queries_path, id: "query-form", method: :get do %>
+        <div class="panel-body">
+          <div class="form-group">
+            <label>Please choose:</label>
+            <div class="form-check">
+              <%= radio_button_tag :type, :adword_url_contains, true, class: "form-check-input" %>
+              <label class="form-check-label" for="type_adword_url_contains">How many URLs contain the *keyword* in AdWords</label>
+            </div>
+            <div class="form-check">
+              <%= radio_button_tag :type, :specific_url, false, class: "form-check-input" %>
+              <label class="form-check-label" for="type_specific_url">How many times a specific *keyword* shows up in SEO.</label>
+            </div>
+            <div class="form-group">
+              <label for="keyword">Keyword:</label>
+                <%= text_field_tag :keyword, nil, class: "form-control" %>
+              <span id="keyword"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="alert alert-danger infoLinkQueries"></div>
+          </div>
+          <div class="form-group">
+            <div class="alert alert-info infoLinkQueryResult"></div>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
