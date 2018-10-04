@@ -10,13 +10,13 @@ module GoogleScraper
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
-
+    config.autoload_paths += %W(#{config.root}/app/services)
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.    
+    # -- all .rb files in that directory are automatically loaded.
 
     # Set the queuing backend to `Sidekiq`
-    # 
+    #
     # Be sure to have the adapter's gem in your Gemfile
     # and follow the adapter's specific installation
     # and deployment instructions.

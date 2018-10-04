@@ -5,6 +5,8 @@ default: &default
   MAILER_DEFAULT_HOST: "localhost"
   MAILER_DEFAULT_PORT: "3000"
   MAILER_SENDER: "Test <noreply@nimbl3.co>"
+  GOOGLE_CLIENT_ID: "677107366813-tktjcff5sfr58qo6vpuq8l2f8f55hqkk.apps.googleusercontent.com"
+  GOOGLE_CLIENT_SECRET: "hkWewiLjcOyWtSioT8gYqzi-"
 
 development:
   <<: *default

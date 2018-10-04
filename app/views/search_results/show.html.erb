@@ -1,0 +1,54 @@
+<% provide :title, "Search result details" %>
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <h2>Search details</h2>
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        Keyword: <%= @search_result.keyword_display %>
+        <span class="pull-right"><%= %></span>
+      </div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <li class="list-group-item active">General information</li>
+            <li class="list-group-item">
+              <%= "Search by: #{@search_result.user.email}" %>
+            </li>
+            <li class="list-group-item">
+              <%= "Total results: #{@search_result.total_results_display}" %>
+            </li>
+            <li class="list-group-item">
+              <%= "Total result links in first page: #{@search_result.total_links}" %>
+            </li>
+          </ul>
+          <ul class="list-group">
+            <li class="list-group-item active">For server tracking</li>
+            <li class="list-group-item">
+              <%= "Server IP: #{@search_result.server_ip}" %>
+            </li>
+            <li class="list-group-item">
+              <%= "UserAgent: #{@search_result.user_agent}" %>
+            </li>
+          </ul>
+          <%= render "links", links: @search_result.links.top_ad, link_type: :top_ad %>
+          <%= render "links", links: @search_result.links.bottom_ad, link_type: :bottom_ad %>
+          <%= render "links", links: @search_result.links.non_ad, link_type: :non_ad %>
+          <div class="jumbotron">
+            <a class="btn btn-primary" data-toggle="collapse" href="#collapse-code" role="button" aria-expanded="false" aria-controls="collapse-code">Toggle HTML code</a>
+            <div class="collapse" id="collapse-code">
+              <div class="html-code">
+                <%= @search_result.html_code.html_safe %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-footer">
+          <div class="row">
+            <div class="col-md-4">
+              <%= link_to 'Back', :back,
+                class: "btn btn-info" %>
+            </div>
+          </div>
+    </div>
+  </div>
+</div>

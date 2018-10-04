@@ -1,0 +1,16 @@
+<% @search_results.each do |search_result| %>
+  <tr>
+    <td><%= search_result.id %></td>
+    <td><%= search_result.keyword_display %></td>
+    <td><%= search_result.total_results_display %></td>
+    <td><%= search_result.total_links %></td>
+    <td><%= search_result.user.email %></td>
+    <td>
+      <%= link_to "Details", search_result_path(search_result),
+        class: "btn btn-success" %>
+      <%= link_to "Remove", search_result_path(search_result), method: :delete,
+        data: {confirm: "Are you sure?"},
+        class: "btn btn-danger" %>
+    </td>
+  </tr>
+<% end %>

@@ -15,6 +15,8 @@ gem 'paranoia', '2.3.1' # Paranoia is a re-implementation of acts_as_paranoid fo
 gem 'ffaker' # A library for generating fake data such as names, addresses, and phone numbers.
 gem 'fabrication' # Fabrication generates objects in Ruby. Fabricators are schematics for your objects, and can be created as needed anywhere in your app or specs.
 gem 'sidekiq' # background processing for Ruby
+gem 'draper' # object-oriented layer of presentation logic
+gem 'config' # Config helps you easily manage environment specific settings in an easy and usable manner.
 
 # Admin
 gem 'rails_admin'
@@ -22,12 +24,15 @@ gem 'rails_admin'
 # Authentications & Authorizations
 gem 'devise' # Authentication solution for Rails with Warden
 gem 'pundit' # Minimal authorization through OO design and pure Ruby classes
+gem 'omniauth-google-oauth2'
+gem 'doorkeeper'
 
 # Assets
 gem 'jquery-rails' # Use jquery as the JavaScript library
 gem 'font-awesome-sass' # Font-Awesome Sass gem for use in Ruby/Rails projects
 gem 'sass-rails' # SASS
 gem 'uglifier'
+gem 'bootstrap-sass'
 
 group :development do
   gem 'better_errors' # Better error page for Rails and other Rack apps
