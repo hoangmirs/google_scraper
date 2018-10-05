@@ -12,10 +12,10 @@ class Api::V1::SearchResultsController < Api::V1::ApiController
 
   private
   def load_search_results
-    @search_results = SearchResult.includes(:user).order(:keyword).page(params[:page]).per(Settings.pagination.per_page)
+    @search_results = policy_scope(SearchResult).includes(:user).order(:keyword).page(params[:page]).per(Settings.pagination.per_page)
   end
 
   def load_search_result
-    @search_result = SearchResult.includes(:user, :links).find_by id: params[:id]
+    @search_result = policy_scope(SearchResult).includes(:user, :links).find_by id: params[:id]
   end
 end

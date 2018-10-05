@@ -2,7 +2,7 @@ class SearchResultsController < ApplicationController
   before_action :load_search_result, except: :index
 
   def index
-    @search_results = SearchResult.includes(:user).order(:keyword).page(params[:page]).per(Settings.pagination.per_page).decorate
+    @search_results = policy_scope(SearchResult).includes(:user).order(:keyword).page(params[:page]).per(Settings.pagination.per_page).decorate
   end
 
   def show
@@ -22,6 +22,6 @@ class SearchResultsController < ApplicationController
 
   private
   def load_search_result
-    @search_result = SearchResult.find_by(id: params[:id])&.decorate
+    @search_result = policy_scope(SearchResult).find_by(id: params[:id])&.decorate
   end
 end
