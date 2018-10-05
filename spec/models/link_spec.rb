@@ -78,6 +78,27 @@ RSpec.describe Link, type: :model do
     end
   end
 
+  describe ".string_occurs" do
+    before(:each) do
+      user = Fabricate.create :user
+      search_result = Fabricate.create :search_result, user: user
+      Fabricate :link, link_type: "non_ad", search_result: search_result,
+        url: "https://news.com/iphone-8-plus-hot"
+      Fabricate :link, link_type: "top_ad", search_result: search_result,
+        url: "https://news.com/iphone-xs-introduction"
+      Fabricate :link, link_type: "bottom_ad", search_result: search_result,
+        url: "https://news.com/iphone-5-has-died"
+    end
+
+    it "should return 3 links with '2+-'" do
+      expect(Link.string_occurs("2+-").count).to eq(3)
+    end
+
+    it "should return 2 links with '3+-'" do
+      expect(Link.string_occurs("3+-").count).to eq(2)
+    end
+  end
+
   describe ".query" do
     before(:each) do
       user = Fabricate.create :user
@@ -115,6 +136,16 @@ RSpec.describe Link, type: :model do
 
       it "should return 0 link 'https://news.com/iphone-8-plus-hot-trend'" do
         expect(Link.query("specific_url", "https://news.com/iphone-8-plus-hot-trend").count).to eq(0)
+      end
+    end
+
+    context "when call with query_type 'string_occurs'" do
+      it "should return 3 links with '2+-'" do
+        expect(Link.query("string_occurs", "2+-").count).to eq(3)
+      end
+
+      it "should return 2 links with '3+-'" do
+        expect(Link.query("string_occurs", "3+-").count).to eq(2)
       end
     end
   end
