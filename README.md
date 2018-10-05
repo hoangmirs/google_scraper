@@ -1,4 +1,4 @@
-
+[![Build Status](https://travis-ci.org/hoangmirs/google_scraper.svg?branch=develop)](https://travis-ci.org/hoangmirs/google_scraper)
 ## Introduction
 
 A web application that will extract large amounts of data from the Google search results page.
