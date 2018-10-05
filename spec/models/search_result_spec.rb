@@ -1,10 +1,11 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe SearchResult, type: :model do
   describe "relationships" do
     it {is_expected.to belong_to(:user)}
     it {is_expected.to have_many(:links).dependent :destroy}
   end
+
   describe "validations" do
     subject { Fabricate.build(:search_result) }
     it {is_expected.to validate_presence_of(:keyword)}
@@ -14,5 +15,6 @@ RSpec.describe SearchResult, type: :model do
     it {is_expected.to validate_presence_of(:html_code)}
     it {is_expected.to validate_presence_of(:server_ip)}
     it {is_expected.to validate_presence_of(:user_agent)}
+    it {is_expected.to accept_nested_attributes_for(:links)}
   end
 end
