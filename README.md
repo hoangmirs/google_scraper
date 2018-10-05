@@ -286,7 +286,7 @@ or
 
 Params:
 ```
-query_type: "adword_url_contains" or "specific_url"
+query_type: "adword_url_contains" or "specific_url" or "string_occurs"
 keyword: {{keyword}}
 ```
 
