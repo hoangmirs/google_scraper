@@ -2,6 +2,7 @@
 ## Introduction
 
 A web application that will extract large amounts of data from the Google search results page.
+By using many workers and change user-agent each request, the app can request google many times.
 
 ## Project Setup
 
@@ -189,3 +190,132 @@ Headers:
 ```
 "Authorization": "Bearer {{access_token}}"
 ```
+
+#### Get search results
+
+`GET /api/v1/search_results?page={{page}}`
+
+Response:
+```
+[
+    {
+        "id": 1,
+        "keyword": "du lich hoi an",
+        "total_results": 20400000,
+        "total_links": 11,
+        "user": "hoang@gmail.com"
+    },
+    {
+        "id": 6,
+        "keyword": "du lich quang nam",
+        "total_results": 27900000,
+        "total_links": 10,
+        "user": "hoang@gmail.com"
+    }
+]
+```
+
+#### Get detail search result by ID
+
+`GET /api/v1/search_results/{{id}}`
+
+Response:
+```
+{
+    "id": 1,
+    "keyword": "du lich hoi an",
+    "total_results": 20400000,
+    "total_links": 3,
+    "user": "hoang.mirs@gmail.com",
+    "results": [
+        {
+            "link_type": "non_ad",
+            "title": "Du lịch Hội An: Cẩm nang từ A đến Z - iVIVU.com",
+            "url": "https://www.ivivu.com/blog/2014/10/du-lich-hoi-an-cam-nang-tu-a-den-z/",
+            "keyword": "du lich hoi an"
+        },
+        {
+            "link_type": "non_ad",
+            "title": "Du Lịch Hội An – Kinh nghiệm du lịch và điểm đến nổi tiếng ở Hội An",
+            "url": "https://www.ivivu.com/blog/category/viet-nam/hoi-an/",
+            "keyword": "du lich hoi an"
+        },
+        {
+            "link_type": "bottom_ad",
+            "title": "Xe Đà Nẵng Hội An giá rẻ 199k | Đà Nẵng to Hội An : 11USD\u200e",
+            "url": "www.hoiansuntravel.com/",
+            "keyword": "du lich hoi an"
+        }
+    ]
+}
+```
+
+#### New search result
+
+`POST /api/v1/search`
+
+Body:
+```
+{
+    "keywords_file": {{file_data}}
+}
+or
+{
+    "keyword": {{keyword}}
+}
+```
+
+Response:
+```
+{
+    "message": "The file is being processed"
+}
+or
+{
+    "message": {{new_search_result_id}}
+}
+or
+{
+    "message": "Invalid request"
+}
+```
+
+#### Get Link queries result
+
+`GET /api/v1/link_queries?type={{query_type}}&keyword={{keyword}}`
+
+Params:
+```
+query_type: "adword_url_contains" or "specific_url" or "string_occurs"
+keyword: {{keyword}}
+```
+
+Response:
+```
+[
+    {
+        "link_type": "top_ad",
+        "title": "[Chuyên Đặt Hàng Trung Quốc] | Phí DV chỉ 12k giá rẻ nhất VN",
+        "url": "www.shopquangchau.vn/",
+        "keyword": "mua hang trung quoc"
+    },
+    {
+        "link_type": "top_ad",
+        "title": "【Mua hàng T Quốc 】 | Có bảng giá 2018, Xem ngay",
+        "url": "www.shiphangquangchau24h.com/",
+        "keyword": "mua hang trung quoc"
+    }
+]
+```
+
+## Servers:
+Main web server:
+- https://googles-scraper.herokuapp.com/
+
+3 worker servers:
+- https://glacial-brushlands-31474.herokuapp.com/
+- https://morning-garden-58758.herokuapp.com/
+- https://murmuring-beach-72301.herokuapp.com/
+
+Config 4 servers use same Postgres DB and Redis
+Can track worker servers from server_ip column of search_results table.

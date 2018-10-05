@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  has_many :search_results
+  has_many :search_results, dependent: :destroy
   has_many :access_grants, class_name: "Doorkeeper::AccessGrant",
                            foreign_key: :resource_owner_id,
                            dependent: :delete_all # or :destroy if you need callbacks
