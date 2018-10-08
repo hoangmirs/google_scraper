@@ -13,4 +13,5 @@ SimpleCov.start 'rails' do
   add_filter '/db/'
   add_group "Services", "app/services"
   add_group "Workers", "app/workers"
+  add_group "Queries", "app/queries"
 end
