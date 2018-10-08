@@ -12,8 +12,9 @@ class ScraperService < BaseService
   def initialize keyword, user_id
     @keyword = keyword
     @user_id = user_id
-    @query_keyword = keyword.gsub /\s/, "+"
+    @query_keyword = keyword.gsub /\s/, '+'
     @error = ""
+    @links_attributes = []
   end
 
   def perform
@@ -24,38 +25,15 @@ class ScraperService < BaseService
   private
   def save_result
     begin
-      links_attributes = []
-      non_ads_links_information(non_ads_links).each do |link|
-        links_attributes << {
-          link_type: Link.link_types[:non_ad],
-          title: link[:title],
-          url: link[:url]
-        }
-      end
-      ads_links_information(top_ads_links).each do |link|
-        links_attributes << {
-          link_type: Link.link_types[:top_ad],
-          title: link[:title],
-          url: link[:url]
-        }
-      end
-      ads_links_information(bottom_ads_links).each do |link|
-        links_attributes << {
-          link_type: Link.link_types[:bottom_ad],
-          title: link[:title],
-          url: link[:url]
-        }
-      end
-      total_links = links_attributes.size
-      server_ip = get_server_ip
+      collect_link_attributes
       @result = SearchResult.create! keyword: keyword,
-        total_results: total_results,
-        total_links: total_links, html_code: html_code, user_id: user_id,
-        links_attributes: links_attributes,
-        server_ip: server_ip, user_agent: @user_agent
+        total_results: total_results, total_links: @links_attributes.size,
+        html_code: html_code, user_id: user_id,
+        links_attributes: @links_attributes,
+        server_ip: get_server_ip, user_agent: @user_agent
     rescue Exception => error
       @error = error.message
-      $stderr.puts "Save search result failed: #{error.message}"
+      warn "Save search result failed: #{error.message}"
     end
   end
 
@@ -69,6 +47,42 @@ class ScraperService < BaseService
     @user_agent = UserAgentRandomService.perform
     @response = open uri, "User-Agent" => @user_agent
     Nokogiri::HTML @response, nil, ENCODING
+  end
+
+  def collect_link_attributes
+    collect_non_ads_links
+    collect_top_ads_links
+    collect_bottom_ads_links
+  end
+
+  def collect_non_ads_links
+    non_ads_links_information(non_ads_links).each do |link|
+      @links_attributes << {
+        link_type: Link.link_types[:non_ad],
+        title: link[:title],
+        url: link[:url]
+      }
+    end
+  end
+
+  def collect_top_ads_links
+    ads_links_information(top_ads_links).each do |link|
+      @links_attributes << {
+        link_type: Link.link_types[:top_ad],
+        title: link[:title],
+        url: link[:url]
+      }
+    end
+  end
+
+  def collect_bottom_ads_links
+    ads_links_information(bottom_ads_links).each do |link|
+      @links_attributes << {
+        link_type: Link.link_types[:bottom_ad],
+        title: link[:title],
+        url: link[:url]
+      }
+    end
   end
 
   def total_results
