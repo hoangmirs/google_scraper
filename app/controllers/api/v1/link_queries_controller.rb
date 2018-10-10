@@ -1,7 +1,7 @@
 class Api::V1::LinkQueriesController < Api::V1::ApiController
   before_action :check_param_type, :check_param_keyword
   def index
-    render json: Link.includes(:search_result).query(params[:type], params[:keyword])
+    render json: load_links
   end
 
   private
@@ -13,5 +13,9 @@ class Api::V1::LinkQueriesController < Api::V1::ApiController
   def check_param_keyword
     return if params[:keyword].present?
     render json: {message: "Empty keyword"}, status: 400
+  end
+
+  def load_links
+    LinksQuery.new.query params[:type], params[:keyword]
   end
 end
